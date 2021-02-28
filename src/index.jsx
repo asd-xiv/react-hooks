@@ -1,5 +1,4 @@
-const debug = require("debug")("asd14:Index")
+const debug = require("debug")("react-hooks:Index")
 
-import "core.ui/index.css"
-
-export const foo = () => "bar"
+export { useCommands } from "./use-commands"
+export { useTheme } from "./use-theme"

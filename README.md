@@ -1,6 +1,6 @@
 <!-- markdownlint-disable line-length -->
 
-# React library template starter
+# React Hooks
 
 <!-- vim-markdown-toc GFM -->
 
@@ -12,8 +12,7 @@
 ## Stack
 
 * Main: [React](https://github.com/facebook/react)
-* Bundler: [Webpack](https://github.com/webpack/webpack)
-* CSS: [PostCSS](https://github.com/postcss/postcss)
+* Bundler: [Babel](https://github.com/babel/babel)
 * Unit testing: [riteway](https://github.com/ericelliott/riteway)
 * E2E testing: [testcafe](https://github.com/DevExpress/testcafe)
 * Linting: [ESLint](https://github.com/eslint/eslint), [Stylelint](https://github.com/stylelint/stylelint), [@asd14/eslint-config](https://github.com/asd-xiv/eslint-config)
@@ -21,4 +20,4 @@
 
 ## Changelog
 
-See the [releases section](https://github.com/andreidmt/tpl-react/releases) for details.
+See the [releases section](https://github.com/asd-xiv/react-hooks/releases) for details.

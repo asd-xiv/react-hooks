@@ -25,13 +25,5 @@
 
     // Add displayName to React.createClass calls
     "@babel/plugin-transform-react-display-name"
-  ],
-
-  "env": {
-    "development": {
-      "plugins": [
-        "react-refresh/babel"
-      ]
-    }
-  }
+  ]
 }
