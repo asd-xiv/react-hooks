@@ -3,63 +3,51 @@ const debug = require("debug")("react-hooks:useSocket")
 import io from "socket.io-client"
 import { useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
-import { is, get, isEmpty } from "@asd14/m"
+import { is, isEmpty } from "@asd14/m"
 
 import { useAuth } from "../use-auth/auth.hook"
 
-import { STORE_KEY } from "./socket.reducer"
+import { STORE_KEY } from "./socket.redux"
 
 /**
- * Real-time socket connection
+ * WebSocket connection hook. Persistent in Redux store to allow only one
+ * connection per user.
  *
- * - one connection per user
- * - pass JWT token from useAuth for server side authorization
- * - socket server address in SOCKET_URL env var
- *
- * @returns {Object}
+ * @returns {[data, methods]}
  */
 export const useSocket = () => {
   const dispatch = useDispatch()
-  const { token } = useAuth()
+  const { accessToken } = useAuth()
   const { socket, retries, isConnecting, isConnected } = useSelector(
-    get([STORE_KEY], {})
+    store => store[STORE_KEY]
   )
 
   const handleConnect = useCallback(
     ({ room }) => {
-      if (isEmpty(process.env.SOCKET_URL)) {
-        return debug(
-          ".connect: Cannot connect without valid server URL in process.env.SOCKET_URL.",
-          `Received "${JSON.stringify(process.env.SOCKET_URL)}"`
-        )
-      }
-
-      if (isEmpty(token)) {
+      if (isEmpty(accessToken)) {
         return debug(
           ".connect: Cannot connect without valid auth token.",
-          `Received "${JSON.stringify(token)}"`
+          `Received "${accessToken}"`
         )
       }
 
       if (isEmpty(room)) {
         return debug(
           ".connect: Cannot connect without valid room.",
-          `Received "${JSON.stringify(room)}"`
+          `Received "${room}"`
         )
       }
 
       if (!is(socket) && !isConnecting) {
         dispatch({
-          type: "SOCKET.CONNECTING",
+          type: `${STORE_KEY}.CONNECTING`,
         })
 
         const newSocket = io(process.env.SOCKET_URL, {
           transports: ["websocket"],
-
-          // optional, depends on how your backed is set up
           query: {
             room,
-            authorization: token,
+            authorization: accessToken,
           },
         })
 
@@ -67,10 +55,8 @@ export const useSocket = () => {
           debug(`Successfull connection to room "${room}"`)
 
           dispatch({
-            type: "SOCKET.CONNECT",
-            payload: {
-              socket: newSocket,
-            },
+            type: `${STORE_KEY}.CONNECT`,
+            payload: { socket: newSocket },
           })
         })
 
@@ -78,16 +64,12 @@ export const useSocket = () => {
           debug(`Disconnected from room "${room}"`)
 
           dispatch({
-            type: "SOCKET.DISCONNECT",
+            type: `${STORE_KEY}.DISCONNECT`,
           })
         })
-
-        return socket
       }
-
-      return socket
     },
-    [socket, token, isConnecting, dispatch]
+    [socket, accessToken, isConnecting, dispatch]
   )
 
   const handleDisconnect = useCallback(() => {

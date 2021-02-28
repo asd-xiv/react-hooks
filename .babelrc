@@ -5,13 +5,22 @@
     // target environment.
     //
     // Uses .browserslistrc to determine what plugins to use.
-    "@babel/preset-env",
+    ["@babel/preset-env", {
+      "useBuiltIns": "entry",
+      "corejs": "3.9"
+    }],
 
     // Load React specific plugins
     "@babel/preset-react"
   ],
 
   "plugins": [
+    // Babel uses very small helpers for common functions such as _extend. By
+    // default this will be added to every file that requires it. This
+    // duplication is sometimes unnecessary, especially when your application
+    // is spread out over multiple files.
+    ["@babel/plugin-transform-runtime", { corejs: 3 }],
+
     // Can speed up reconciliation and reduce garbage collection pressure
     // by hoisting React elements to the highest possible scope,
     // preventing multiple unnecessary reinstantiations.
@@ -19,9 +28,6 @@
 
     // Remove data-test-id attributes from your production builds.
     "babel-plugin-jsx-remove-data-test-id",
-
-    // Enables the re-use of Babel's injected helper code to save on codesize
-    "@babel/plugin-transform-runtime",
 
     // Add displayName to React.createClass calls
     "@babel/plugin-transform-react-display-name"

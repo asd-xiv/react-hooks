@@ -51,7 +51,7 @@ const usePortal = id => {
  *
  * @example
  * <Portal id="image-overlay">
- *  This is rendered in a direct child of document.body
+ *   This is rendered in a direct child of document.body
  * </Portal>
  *
  * @returns {React.Component}

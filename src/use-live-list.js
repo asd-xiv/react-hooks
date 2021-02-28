@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { is } from "@asd14/m"
 
-import { useSocket } from "./use-socket"
+import { useSocket } from "./use-socket/socket.hook"
 
 /**
  * Mark lists that listen to real-time events to prevent double updates

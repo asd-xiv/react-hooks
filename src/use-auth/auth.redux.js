@@ -7,7 +7,10 @@ const defaultState = {
 
 export const STORE_KEY = "GLOBAL.AUTH"
 
-export const reducer = (state, { type, profile, payload = {} }) => {
+export const reducer = (
+  state = defaultState,
+  { type, profile, payload = {} }
+) => {
   switch (type) {
     case `${STORE_KEY}.SWITCH_PROFILE`:
       sessionStorage.setItem("useJWTAuth.profile", profile)
@@ -87,6 +90,6 @@ export const reducer = (state, { type, profile, payload = {} }) => {
     // }
 
     default:
-      return defaultState
+      return state
   }
 }

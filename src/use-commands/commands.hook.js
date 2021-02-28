@@ -6,35 +6,13 @@ import {
   merge,
   sort,
   startsWith,
-  removeWith,
-  hasWith,
-  replaceWith,
-  when,
   map,
   reduce,
   pipe,
   filterWith,
-  append,
 } from "@asd14/m"
 
-export const STORE_KEY = "GLOBAL.COMMANDS"
-
-export const reducer = (state = [], { type, layer, commands }) => {
-  switch (type) {
-    case `${STORE_KEY}.ADD`:
-      return when(
-        hasWith({ layer }),
-        replaceWith({ layer }, { layer, commands }),
-        append({ layer, commands })
-      )(state)
-
-    case `${STORE_KEY}.REMOVE`:
-      return removeWith({ layer }, state)
-
-    default:
-      return state
-  }
-}
+import { STORE_KEY } from "./commands.redux"
 
 export const useCommands = () => {
   const dispatch = useDispatch()
@@ -70,17 +48,17 @@ export const useCommands = () => {
 /**
  * Return commands assigned to layer and also parent layers
  *
- * @param   {string}        layer    Layer name
- * @param   {Object[]}      commands Array of objects containing commands for each layer
+ * @param {string}   layer    Layer name
+ * @param {Object[]} commands Array of objects containing commands for each layer
  *
- * @returns {CommandsState}          Array with commands
+ * @returns {CommandsState} Array with commands
  *
  * @example
- *                                   byLayer("base.work", [...])
- *                                   // => [
- *                                   //   {layer: "base", name: "login", ...},
- *                                   //   {layer: "base.work", name: "profile", ...}
- *                                   // ]
+ * byLayer("base.work", [...])
+ * // => [
+ * //   {layer: "base", name: "login", ...},
+ * //   {layer: "base.work", name: "profile", ...}
+ * // ]
  */
 export const byLayer = (layer, commands) =>
   pipe(

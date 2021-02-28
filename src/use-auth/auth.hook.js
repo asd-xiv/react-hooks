@@ -1,13 +1,24 @@
 const debug = require("debug")("react-hooks:AuthHook")
 
 import { useSelector, useDispatch } from "react-redux"
-import { get, is } from "@asd14/m"
+import { pipe, reduce, split, last, read, is } from "@asd14/m"
 import { GET, POST, PATCH, set as setupFetch } from "@asd14/fetch-browser"
 
 import { useCallback } from "../use-deep"
-import { errorMessagesByField } from "core.libs/routes"
 
-import { STORE_KEY } from "./auth.reducer"
+import { STORE_KEY } from "./auth.redux"
+
+const parseAJVError = pipe(
+  read(["body", "details", "fieldErrors"], []),
+  reduce((accumulator, item) => {
+    const field = pipe(read("dataPath"), split("."), last)(item)
+
+    return {
+      ...accumulator,
+      [field]: item.message,
+    }
+  }, {})
+)
 
 const persistUser = ({ profile, accessToken } = {}) => {
   // persist JWT for hard refresh or new tabs
@@ -26,9 +37,9 @@ const forgetUser = ({ profile } = {}) => {
 
 export const useAuth = () => {
   const dispatch = useDispatch()
-  const profile = useSelector(get([STORE_KEY, "profile"], {}))
+  const profile = useSelector(read([STORE_KEY, "profile"], {}))
   const { id, name, email, avatarURL, isLoading } = useSelector(
-    get([STORE_KEY, "data", profile], {})
+    read([STORE_KEY, "data", profile], {})
   )
 
   const accessToken = localStorage.getItem(`useJWTAuth.${profile}.accessToken`)
@@ -69,7 +80,7 @@ export const useAuth = () => {
         dispatch({
           type: `${STORE_KEY}.LOGIN_ERROR`,
           profile,
-          payload: errorMessagesByField(error),
+          payload: parseAJVError(error),
         })
       })
   }
@@ -139,7 +150,7 @@ export const useAuth = () => {
             dispatch({
               type: `${STORE_KEY}.REGISTER_ERROR`,
               profile,
-              payload: errorMessagesByField(error),
+              payload: parseAJVError(error),
             })
 
             throw error
@@ -173,7 +184,7 @@ export const useAuth = () => {
             dispatch({
               type: `${STORE_KEY}.LOGIN_REQUEST_ERROR`,
               profile,
-              payload: errorMessagesByField(error),
+              payload: parseAJVError(error),
             })
 
             throw error
@@ -213,7 +224,7 @@ export const useAuth = () => {
             dispatch({
               type: `${STORE_KEY}.LOGIN_ERROR`,
               profile,
-              payload: errorMessagesByField(error),
+              payload: parseAJVError(error),
             })
 
             throw error

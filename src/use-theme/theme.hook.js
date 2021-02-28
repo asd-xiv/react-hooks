@@ -3,42 +3,32 @@ const debug = require("debug")("react-hooks:useTheme")
 import { useCallback } from "react"
 import { useSelector, useDispatch } from "react-redux"
 
-export const STORE_KEY = "GLOBAL.THEME"
+import { STORE_KEY } from "./theme.redux"
 
-export const reducer = (state, { type, payload = {} }) => {
-  switch (type) {
-    case `${STORE_KEY}.SET`:
-      return {
-        ...state,
-        ...payload,
-      }
-    default:
-      return {
-        themeClass: "theme-gruvbox-dark",
-        sizeClass: "size-normal",
-        gridUnitSize: 16,
-      }
-  }
-}
-
-export const useTheme = () => {
+export const useTheme = (props = {}) => {
   const dispatch = useDispatch()
-  const { themeClass, sizeClass, gridUnitSize } = useSelector(
+
+  const {
+    theme: defaultTheme = "default",
+    size: defaultSize = "normal",
+  } = props
+
+  const { theme = defaultTheme, size = defaultSize, unit } = useSelector(
     state => state[STORE_KEY]
   )
 
   return [
     {
-      themeClass,
-      sizeClass,
-      gridUnitSize,
+      theme,
+      size,
+      unit,
     },
     {
       setTheme: useCallback(
         source =>
           dispatch({
             type: `${STORE_KEY}.SET`,
-            payload: { themeClass: source },
+            payload: { theme: source },
           }),
         [dispatch]
       ),

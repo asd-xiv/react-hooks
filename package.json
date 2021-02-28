@@ -21,8 +21,8 @@
   ],
   "scripts": {
     "----UTIL": "",
-    "clean": "rm -rf ./node_modules",
-    "setup": "npm run clean && npm i && npm audit fix",
+    "setup:clean": "rm -rf ./node_modules",
+    "setup": "npm run setup:clean && npm i && npm audit fix",
     "setup:ci": "npm ci && npm audit fix",
     "update": "npm-check --update",
     "update-force": "npm-check --update-all",
@@ -39,9 +39,10 @@
   },
   "dependencies": {
     "@asd14/fetch-browser": "^2.0.0",
-    "@asd14/m": "^5.0.0",
-    "@babel/runtime": "^7.13.8",
+    "@asd14/m": "^5.1.0",
+    "@babel/runtime-corejs3": "^7.13.8",
     "classnames": "^2.2.6",
+    "core-js": "^3.9.1",
     "cuid": "^2.1.8",
     "debug": "^4.1.1",
     "luxon": "^1.26.0",
