@@ -35,7 +35,9 @@
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
     "test": "riteway -r @babel/register 'src/**/*.test.js' 'src/**/*.test.jsx' | tap-nirvana",
-    "tdd": "nodemon -e js,jsx,json --watch src --exec 'npm test'"
+    "tdd": "nodemon -e js,jsx,json --watch src --exec 'npm test'",
+    "----PUBLISH": "",
+    "publish": "semantic-release"
   },
   "dependencies": {
     "@asd14/fetch-browser": "^2.0.0",
@@ -88,6 +90,7 @@
     "npm-check": "^5.9.2",
     "prettier": "^2.2.1",
     "riteway": "^6.2.1",
+    "semantic-release": "^17.4.0",
     "tap-nirvana": "^1.1.0",
     "testcafe": "^1.11.0",
     "url-loader": "^4.1.1",

@@ -1,0 +1,116 @@
+# Javascript Node CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-javascript/ for more details
+#
+version: 2.1
+
+#
+# YAML variable templates
+#
+job_defaults: &job_defaults
+  working_directory: ~/react-hooks
+  docker:
+    - image: circleci/node:12
+
+job_filter: &job_filter
+  filters:
+    branches:
+      only:
+        - master
+
+#
+# Run all jobs in sequence
+#
+workflows:
+  version: 2
+  npm_publish:
+    jobs:
+      - setup:
+          <<: *job_filter
+      # - test:
+      #     <<: *job_filter
+      #     requires:
+      #       - setup
+      # - coverage:
+      #     <<: *job_filter
+      #     requires:
+      #       - test
+      # - publish:
+      #     <<: *job_filter
+      #     requires:
+      #       - coverage
+      - publish:
+          <<: *job_filter
+          requires:
+            - setup
+
+#
+# Define atomic jobs
+#
+jobs:
+  setup:
+    <<: *job_defaults
+
+    steps:
+      - checkout
+
+      - run:
+          name: "react-hooks: Install npm packages"
+          command: "npm run setup:ci"
+
+      - run:
+          name: "react-hooks: Babel compile"
+          command: "npm run build"
+
+      - save_cache:
+          paths:
+            - node_modules
+            - dist
+          key: react-hooks-{{ .Branch }}-{{ .Revision }}
+
+  test:
+    <<: *job_defaults
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - react-hooks-{{ .Branch }}-{{ .Revision }}
+
+      - run:
+          name: "react-hooks: Run linter"
+          command: "npm run lint"
+
+      - run:
+          name: "react-hooks: Run tests"
+          command: "npm run test:ci"
+
+  coverage:
+    <<: *job_defaults
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - react-hooks-{{ .Branch }}-{{ .Revision }}
+
+      - run:
+          name: "react-hooks: Publish test coverage to COVERALLS"
+          command: "npm run coverage:ci"
+
+  publish:
+    <<: *job_defaults
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - react-hooks-{{ .Branch }}-{{ .Revision }}
+
+      - run:
+          name: "react-hooks: Release to npm with semantic-release"
+          command: "npx semantic-release"
+
