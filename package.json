@@ -30,7 +30,7 @@
     "build:clean": "rm -rf ./dist",
     "build": "npm run build:clean && babel src --out-dir dist",
     "----LINT": "",
-    "lint:md": "markdownlint *.md",
+    "lint:md": "markdownlint '*.md'",
     "lint:js": "eslint --ext .jsx,.js,.json --quiet src",
     "lint": "npm run lint:md && npm run lint:js",
     "----TEST": "",
@@ -42,9 +42,8 @@
   "dependencies": {
     "@asd14/fetch-browser": "^2.0.0",
     "@asd14/m": "^5.1.0",
-    "@babel/runtime-corejs3": "^7.13.8",
+    "@babel/runtime": "^7.13.8",
     "classnames": "^2.2.6",
-    "core-js": "^3.9.1",
     "cuid": "^2.1.8",
     "debug": "^4.1.1",
     "luxon": "^1.26.0",
@@ -58,7 +57,7 @@
     "react-router-dom": "^5.*"
   },
   "devDependencies": {
-    "@asd14/eslint-config": "^5.29.0",
+    "@asd14/eslint-config": "^5.29.1",
     "@babel/cli": "^7.12.17",
     "@babel/core": "^7.13.8",
     "@babel/plugin-transform-react-constant-elements": "^7.12.13",

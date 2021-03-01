@@ -1,14 +1,10 @@
 {
   "presets": [
     // Use the latest JavaScript without needing to micromanage which syntax
-    // transforms (and optionally, browser polyfills) are needed by your
-    // target environment.
+    // transforms and browser polyfills are needed by your target environment.
     //
-    // Uses .browserslistrc to determine what plugins to use.
-    ["@babel/preset-env", {
-      "useBuiltIns": "entry",
-      "corejs": "3.9"
-    }],
+    // Uses .browserslistrc to specify target environments.
+    "@babel/preset-env",
 
     // Load React specific plugins
     "@babel/preset-react"
@@ -19,7 +15,7 @@
     // default this will be added to every file that requires it. This
     // duplication is sometimes unnecessary, especially when your application
     // is spread out over multiple files.
-    ["@babel/plugin-transform-runtime", { corejs: 3 }],
+    "@babel/plugin-transform-runtime",
 
     // Can speed up reconciliation and reduce garbage collection pressure
     // by hoisting React elements to the highest possible scope,
