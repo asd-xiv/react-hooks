@@ -29,6 +29,7 @@
     "----BUILD": "",
     "build:clean": "rm -rf ./dist",
     "build": "npm run build:clean && babel src --out-dir dist",
+    "build:watch": "nodemon -e js,jsx,json --watch src --exec 'npm run build'",
     "----LINT": "",
     "lint:md": "markdownlint '*.md'",
     "lint:js": "eslint --ext .jsx,.js,.json --quiet src",
