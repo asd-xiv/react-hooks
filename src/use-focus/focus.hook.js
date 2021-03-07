@@ -3,7 +3,7 @@ const debug = require("debug")("react-hooks:useFocus")
 import { useSelector, useDispatch } from "react-redux"
 import { is, isMatch } from "@asd14/m"
 
-import { setLayer as setKeyboardLayer } from "./keyboard"
+import { setLayer as setKeyboardLayer } from "../use-keyboard/keyboard.library"
 import { useCallback } from "../use-deep"
 
 import { STORE_KEY } from "./focus.redux"

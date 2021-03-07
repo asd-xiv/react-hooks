@@ -1,4 +1,4 @@
-const debug = require("debug")("probable-spoon:KeyboardLib")
+const debug = require("debug")("@asd14@react-hooks:KeyboardLib")
 
 import {
   concat,
@@ -19,23 +19,27 @@ import {
  */
 
 /**
- * Shortcut internals
+ * Layered Keyboard state
  *
- * @typedef  {object}   KeyboardShortcut
+ * @typedef {Object} KeyboardState
  *
- * @property {string}   name
- * @property {string}   description
- * @property {number}   weight
- * @property {object[]} params
- * @property {Function} onFinish
+ * @property {String}             selectedLayer
+ * @property {KeyboardShortcut[]} shortcuts
  */
 
 /**
- * Layered Keyboard state
+ * Shortcut internals
  *
- * @property {string}             selectedLayer
- * @property {KeyboardShortcut[]} shortcuts
+ * @typedef {Object} KeyboardShortcut
+ *
+ * @property {String}   name
+ * @property {String}   description
+ * @property {Number}   weight
+ * @property {Object[]} params
+ * @property {Function} onFinish
  */
+
+/** @type {KeyboardState} */
 const state = {
   selectedLayer: "base",
   shortcuts: {},
@@ -44,9 +48,9 @@ const state = {
 /**
  * Find shortcut by key and layer. If does not exist, look also in "base" layer
  *
- * @param {Object} root0
- * @param {string} root0.layer
- * @param {string} root0.key
+ * @param {Object} props
+ * @param {string} props.layer
+ * @param {string} props.key
  *
  * @returns {Object}
  */
@@ -65,6 +69,7 @@ const findShortcut = ({ layer, key }) => shortcuts => {
  *   shortcuts: {
  *     // run the same function when pressing either "a" or "b" key
  *     "a,b": () => {}
+ *
  *     // after expand
  *     "a": () => {},
  *     "b": () => {}
@@ -76,11 +81,11 @@ const findShortcut = ({ layer, key }) => shortcuts => {
 const expandKeysByComma = pipe(
   Object.entries,
   reduce(
-    (accumulator, [key, value]) =>
+    (acc, [key, value]) =>
       pipe(
         split(","),
         map(source => [source, value]),
-        concat(accumulator)
+        concat(acc)
       )(key),
     []
   ),
@@ -94,7 +99,7 @@ const expandKeysByComma = pipe(
 document.addEventListener(
   "keydown",
   event => {
-    const isSource = has(event.target.tagName)(["INPUT", "TEXTAREA"])
+    const isSource = has(event.target.tagName, ["INPUT", "TEXTAREA"])
     const isEditable = event.target.isContentEditable
 
     if (!isSource && !isEditable) {
@@ -103,7 +108,7 @@ document.addEventListener(
           layer: state.selectedLayer,
           key: event.key,
         }),
-        when(is, handler => handler.call(undefined, event))
+        when(is, handler => handler(event))
       )(state.shortcuts)
     }
   },
@@ -122,33 +127,17 @@ export const setLayer = source => {
 }
 
 /**
- * Remove shortcuts and layer
- *
- * @param {Object} props
- * @param {string} props.layer
- *
- * @returns {undefined}
- */
-export const removeShortcuts = ({ layer }) => {
-  state.shortcuts = {
-    ...state.shortcuts,
-    [layer]: undefined,
-  }
-}
-
-/**
  * Add/update layer shortcuts
  *
- * @param {Object}   props
- * @param {string}   props.layer
- * @param {string[]} props.shortcuts
+ * @param {string} layer
+ * @param {Object} shortcuts
  *
  * @returns {undefined}
  */
-export const addShortcuts = ({ layer, shortcuts }) => {
+export const addShortcuts = layer => shortcuts => {
   if (isEmpty(shortcuts)) {
     throw new Error(
-      `useKeyboard: expected non empty array in "shortcuts" key, got "${JSON.stringify(
+      `asd14@react-hooks/useKeyboard: expected non empty object in "shortcuts" key, got "${JSON.stringify(
         shortcuts
       )}"`
     )
@@ -157,5 +146,19 @@ export const addShortcuts = ({ layer, shortcuts }) => {
   state.shortcuts = {
     ...state.shortcuts,
     [layer]: expandKeysByComma(shortcuts),
+  }
+}
+
+/**
+ * Remove shortcuts from layer
+ *
+ * @param {string} layer
+ *
+ * @returns {undefined}
+ */
+export const removeShortcuts = layer => () => {
+  state.shortcuts = {
+    ...state.shortcuts,
+    [layer]: undefined,
   }
 }

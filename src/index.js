@@ -10,12 +10,10 @@ export * as useFocusRedux from "./use-focus/focus.redux"
 export { useSocket } from "./use-socket/socket.hook"
 export * as useSocketRedux from "./use-socket/socket.redux"
 
-export { useTheme } from "./use-theme/theme.hook"
-export * as useThemeRedux from "./use-theme/theme.redux"
-
 export { useMemo, useCallback, useEffect, deepReactMemo } from "./use-deep"
 export { useDom } from "./use-dom"
 export { useDrag } from "./use-drag"
+export { useKeyboard } from "./use-keyboard/keyboard.hook"
 export { useList } from "./use-list"
 export { useLiveList } from "./use-live-list"
 export { useMount } from "./use-mount"
