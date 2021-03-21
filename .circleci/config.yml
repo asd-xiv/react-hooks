@@ -56,7 +56,7 @@ jobs:
 
       - run:
           name: "react-hooks: Install npm packages"
-          command: "npm run setup:ci"
+          command: "npm run setup"
 
       - run:
           name: "react-hooks: Babel compile"
