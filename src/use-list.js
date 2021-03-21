@@ -4,10 +4,11 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
 /**
- * Redux list hook
+ * Attach State List to Redux store.
+ * - Link "dispatch" for Container -> List interaction
+ * - Return selector for List -> Container data retrival
  *
- * @param {Object} list        Redux List object
- * @param {Object} socketProps WebSocket configuration
+ * @param {Object} list StateList instance
  *
  * @returns {Object}
  */

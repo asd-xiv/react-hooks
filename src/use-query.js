@@ -6,9 +6,9 @@ import { stringify, parse } from "qs"
 import { useMemo, useCallback } from "./use-deep"
 
 /**
- * Get/Set query params via `qs` lib
+ * Get and set query params
  *
- * @returns {Object}
+ * @returns {[Object, Function]}
  */
 export const useQuery = () => {
   const { search } = useLocation()

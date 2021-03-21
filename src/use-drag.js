@@ -6,8 +6,8 @@ import { is, throttle } from "@asd14/m"
 export const useDrag = ({ id, onDrag, onDrop }) => {
   const [
     {
-      startMouseCoordinates: [startMouseTop, startMouseLeft],
-      startCoordinates: [startTop, startLeft],
+      startMouseCoordinates: [startMouseLeft, startMouseTop],
+      startCoordinates: [startX, startY],
       isDragging,
     },
     setDragStatus,
@@ -25,7 +25,7 @@ export const useDrag = ({ id, onDrag, onDrop }) => {
             const offsetX = event.clientX - startMouseLeft
             const offsetY = event.clientY - startMouseTop
 
-            onDrag(id, [startTop + offsetY, startLeft + offsetX], event)
+            onDrag(id, [startX + offsetX, startY + offsetY], event)
           }
         },
         {
@@ -33,7 +33,7 @@ export const useDrag = ({ id, onDrag, onDrop }) => {
           hasExecAfterStop: true,
         }
       ),
-    [id, startLeft, startTop, startMouseLeft, startMouseTop, isDragging, onDrag]
+    [id, startX, startY, startMouseLeft, startMouseTop, isDragging, onDrag]
   )
 
   const handleMouseUp = useCallback(
@@ -64,9 +64,9 @@ export const useDrag = ({ id, onDrag, onDrop }) => {
   }, [isDragging, handleMouseMove, handleMouseUp])
 
   return {
-    onPickup: useCallback((event, { coordinates }) => {
+    onPickup: useCallback((event, coordinates) => {
       setDragStatus({
-        startMouseCoordinates: [event.clientY, event.clientX],
+        startMouseCoordinates: [event.clientX, event.clientY],
         startCoordinates: coordinates,
         isDragging: true,
       })
